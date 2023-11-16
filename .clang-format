@@ -1,0 +1,42 @@
+﻿---
+BasedOnStyle: Google
+
+# A function call's arguments will either be all on the same line or will have
+# one line each.
+BinPackArguments: 'false'
+
+# A function declaration's or function definition's parameters will either all
+# be on the same line or will have one line each.
+BinPackParameters: 'false'
+
+# Attach braces to surrounding context, but break before function definitions,
+# `catch` and `else`.
+BreakBeforeBraces: Stroustrup
+
+# The column limit.
+ColumnLimit: '90'
+
+# Do not try to guess pointer and reference aligment from source file; requires
+# option `PointerAlignment` to be set.
+DerivePointerAlignment: 'false'
+
+# Align pointers and references to the left (bind to type).
+PointerAlignment: Left
+
+# Indents preprocessor directives before the hash.
+# IndentPPDirectives: BeforeHash # preferred option, waiting for support in clang-format 10.0
+IndentPPDirectives: AfterHash # for the time being indent directives after the hash
+
+# The number of columns to use for indentation.
+IndentWidth: '4'
+
+# Language this format style is targeted at.
+Language: Cpp
+
+# Indent once in inner (nested) namespaces.
+NamespaceIndentation: Inner
+
+# Use features of C++11 or later
+Standard: Cpp11
+
+...

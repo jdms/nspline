@@ -12,12 +12,11 @@
 /* See the License for the specific language governing permissions and */
 /* limitations under the License. */
 
+#ifndef JDMS_NSPLINE_H
+#define JDMS_NSPLINE_H
 
-#ifndef NSPLINE_H
-#define NSPLINE_H
-
-#include <vector>
 #include <functional>
+#include <vector>
 
 /* MSVC is unable to honour the SYSTEM directive in CMake, thus creating a
  * stream of warnings steaming from Eigen.  The following pragma(s) is (are)
@@ -34,28 +33,30 @@
 #include <Eigen/Dense>
 
 
+namespace jdms {
+
 class NSpline {
 
     public:
-        NSpline( double (*f) ( double ) = __identity_map, /* = diffeo, change of coordinates */ 
-                double (*Df) ( double ) = __D_identity_map, double (*D2f) ( double ) = __D2_identity_map ) 
-        {
-            _H = f;
-            _DH = Df;
-            _D2H = D2f;
+        NSpline() = default;
 
-            initialized = false; 
-        }
-        
         NSpline( std::vector<double> C /* = centers */, std::vector<double> F /* = function evaluations */ ) {
-            _H = __identity_map; 
-            _DH = __D_identity_map; 
-            _D2H = __D2_identity_map;
+            _H = NSpline::_identity_map; 
+            _DH = NSpline::_D_identity_map; 
+            _D2H = NSpline::_D2_identity_map;
             
             init( C, F );
         }
         
         ~NSpline() = default;
+
+        NSpline( const NSpline& ) = default;
+
+        NSpline& operator=(const NSpline& ) = default;
+
+        NSpline( NSpline&& ) = default;
+
+        NSpline& operator=( NSpline&& ) = default;
 
         bool init( std::vector<double> C /* = centers */, std::vector<double> F /* = function evaluations */  ) {
 
@@ -173,18 +174,22 @@ class NSpline {
             return d2y;
         }
 
-        static double __identity_map( double x ) { return x; }
+    protected:
+        NSpline( double (*f)(double), double (*Df)(double), double (*D2f)(double) ) 
+        {
+            _H = f;
+            _DH = Df;
+            _D2H = D2f;
 
-        static double __D_identity_map( double ) { return 1; }
-
-        static double __D2_identity_map( double ) { return 0; }
-
+            initialized = false; 
+        }
+        
     private: 
         bool initialized; 
 
-        std::function<double(double)> _H; // _H is a change of coordinates  
-        std::function<double(double)> _DH; // Derivative of _H  
-        std::function<double(double)> _D2H; // Second derivative of _H  
+        std::function<double(double)> _H = NSpline::_identity_map; // _H is a change of coordinates  
+        std::function<double(double)> _DH = NSpline::_D_identity_map; // Derivative of _H  
+        std::function<double(double)> _D2H = NSpline::_D2_identity_map; // Second derivative of _H  
 
         /* NSpline *_s; */
 
@@ -192,6 +197,12 @@ class NSpline {
 
         Eigen::VectorXd _alpha; // cubic spline coeficients 
         Eigen::VectorXd _beta;  // linear part coeficients 
+
+        static double _identity_map( double x ) { return x; }
+
+        static double _D_identity_map( double ) { return 1; }
+
+        static double _D2_identity_map( double ) { return 0; }
 
         inline static double abs( double x ) 
         {
@@ -251,6 +262,8 @@ class NSpline {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
+
+} // namespace jdms
 
 #if defined(_WIN32)
     #pragma warning( pop )

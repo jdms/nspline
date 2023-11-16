@@ -46,7 +46,7 @@ std::iota(t.begin(), t.end(), 1); // makes t = { 1, 2, ..., N }
 
 // Create the actual interpolants
 
-NSpline x(t, gamma_x), y(t, gamma_y), z(t, gamma_z);
+jdms::NSpline x(t, gamma_x), y(t, gamma_y), z(t, gamma_z);
 ```
 
 The interpolants are evaluated with `NSpline::operator()`, thus `x(1) ==
@@ -70,10 +70,10 @@ where $\wedge$ is the vector product.
 ### Normal vector of $\alpha$ at a point $t$, $N(t)$:
 
 $$ 
-    T^\prime(t) = \displaystyle \frac{\alpha^{\prime\prime}(t)}{|\alpha^\prime(t)|} 
+    N(t) = \frac{T^\prime(t)}{k(t)}; ~ \text{where} ~
+    T^\prime(t) = \displaystyle \frac{\alpha^{\prime\prime}(t)}{|\alpha^\prime(t)|}
     - \frac{T(t)}{|\alpha^\prime(t)|} \langle\alpha^{\prime\prime}(t), T(t)\rangle, 
-    ~ N(t) = \frac{T^\prime(t)}{T(t)} 
 $$ {#eq:normals}
 
-provided that $k(t) \neq 0$, see @eq:curvatures and @eq:tangents.  Here $\langle, \rangle$ stands for the inner product.
+provided that $k(t) \neq 0$ and $|\alpha^\prime(t)| \neq 0$, see @eq:curvatures and @eq:tangents.  Here $\langle, \rangle$ stands for the inner product.
 

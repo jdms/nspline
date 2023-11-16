@@ -1,7 +1,7 @@
-CXX=clang++
+CXX=c++
 
 .NOTPARALLEL:
-all: run clean build-doc 
+all: run clean
 
 build-doc:
 	pandoc --filter pandoc-crossref --from=markdown --to=latex --standalone --variable=colorlinks:true -V fontsize=12pt readme.md -o readme.pdf
